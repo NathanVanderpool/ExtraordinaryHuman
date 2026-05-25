@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Mantras – Joy for No Reason</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Syne:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8CC80;
+    --gold-dim: #8B6B2E;
+    --ink: #0A0905;
+    --player-h: 72px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--gold-light);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem 6rem;
+    position: relative;
+    text-align: center;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-wrap {
+    width: min(320px, 78vw);
+    margin-bottom: 3rem;
+    animation: fadeUp 1.2s ease both;
+  }
+  .logo-wrap img { width: 100%; height: auto; display: block; }
+  .hero-sub {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    animation: fadeUp 1.2s 0.2s ease both;
+    margin-bottom: 1rem;
+  }
+  .hero-tagline {
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+    color: rgba(232,204,128,0.8);
+    max-width: 460px;
+    line-height: 1.65;
+    animation: fadeUp 1.2s 0.35s ease both;
+    margin-bottom: 3rem;
+  }
+  .scroll-cue {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    animation: fadeUp 1.2s 0.7s ease both, pulse 3s 2s ease-in-out infinite;
+  }
+
+  /* ── SHARED ── */
+  .constrain { max-width: 760px; margin: 0 auto; padding: 0 2rem; }
+  .eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.63rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    font-weight: 300;
+    color: var(--gold-light);
+    line-height: 1.25;
+    margin-bottom: 1.2rem;
+  }
+  .section-body {
+    font-size: clamp(1rem, 2vw, 1.12rem);
+    font-weight: 300;
+    line-height: 1.85;
+    color: rgba(232,204,128,0.65);
+  }
+  .divider {
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 0 auto;
+  }
+  .spacer-lg { height: 5rem; }
+  .spacer-md { height: 3.5rem; }
+
+  /* ── SONG LIST ── */
+  .song-list { list-style: none; margin-top: 3rem; }
+
+  .song-row { border-top: 1px solid rgba(201,168,76,0.14); }
+  .song-row:last-child { border-bottom: 1px solid rgba(201,168,76,0.14); }
+
+  .song-header {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr 36px 28px;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.4rem 0;
+    cursor: default;
+  }
+
+  .song-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-align: right;
+  }
+
+  .song-info { display: flex; flex-direction: column; gap: 0.2rem; cursor: pointer; }
+  .song-info:hover .song-name { opacity: 0.8; }
+
+  .song-name {
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--gold-light);
+    transition: opacity 0.2s;
+  }
+  .song-vibe {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: rgba(232,204,128,0.45);
+  }
+
+  /* play button */
+  .play-btn {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.28);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.2s, background 0.2s;
+    background: transparent;
+    padding: 0;
+  }
+  .play-btn:hover { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+  .play-btn svg { width: 12px; height: 12px; fill: var(--gold); flex-shrink: 0; }
+  .play-btn.playing svg.icon-play { display: none; }
+  .play-btn:not(.playing) svg.icon-pause { display: none; }
+
+  /* expand toggle */
+  .song-toggle {
+    width: 28px; height: 28px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.3s;
+    color: var(--gold-dim);
+    font-size: 0.75rem;
+    line-height: 1;
+    background: transparent;
+    padding: 0;
+    font-family: 'Syne', sans-serif;
+  }
+  .song-row.open .song-toggle { border-color: var(--gold-dim); transform: rotate(45deg); }
+
+  /* ── LYRICS PANEL ── */
+  .lyrics-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+  }
+  .song-row.open .lyrics-panel { max-height: 1800px; }
+
+  .lyrics-inner { padding: 0.5rem 0 2.5rem 3rem; }
+
+  .lyrics-vibe {
+    font-style: italic;
+    font-size: 0.93rem;
+    color: rgba(232,204,128,0.42);
+    line-height: 1.7;
+    margin-bottom: 1.6rem;
+    max-width: 460px;
+    border-left: 1px solid rgba(201,168,76,0.12);
+    padding-left: 1rem;
+  }
+
+  .lyrics-body {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 2;
+    color: rgba(232,204,128,0.78);
+    max-width: 520px;
+  }
+
+  .lyrics-body .line { display: block; }
+
+  .lyrics-body .rpt {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.56rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-left: 0.5rem;
+    vertical-align: 0.15em;
+  }
+
+  .lyrics-body .gap { display: block; height: 0.9rem; }
+
+  .lyrics-body .dots {
+    display: block;
+    color: rgba(201,168,76,0.22);
+    letter-spacing: 0.5em;
+    font-size: 0.8rem;
+    margin: 0.2rem 0;
+  }
+
+  /* ── DANA SECTION ── */
+  .dana-section {
+    border: 1px solid rgba(201,168,76,0.14);
+    padding: 3.5rem 3rem;
+    position: relative;
+  }
+  .dana-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,168,76,0.03), transparent 70%);
+    pointer-events: none;
+  }
+  .batch-dots { display: flex; gap: 0.5rem; align-items: center; margin: 2rem 0 0.6rem; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  .dot.dim { opacity: 0.2; }
+  .dot-sep { color: rgba(201,168,76,0.25); font-size: 1rem; padding: 0 0.3rem; }
+  .batch-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 2rem;
+  }
+  .cta-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.85rem 2.2rem;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold-light);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.25s, border-color 0.25s;
+    background: transparent;
+  }
+  .cta-btn:hover { background: rgba(201,168,76,0.08); border-color: var(--gold); }
+
+  /* ── BOTTOM PLAYER ── */
+  #player-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: var(--player-h);
+    background: #100D04;
+    border-top: 1px solid rgba(201,168,76,0.18);
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    gap: 1.2rem;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    z-index: 100;
+  }
+  #player-bar.visible { transform: translateY(0); }
+
+  .player-cover {
+    width: 40px; height: 40px;
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 2px;
+    background: rgba(201,168,76,0.06);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .player-cover svg { width: 14px; height: 14px; fill: var(--gold-dim); }
+
+  .player-info { flex: 1; min-width: 0; }
+  .player-title {
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--gold-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .player-artist {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-top: 0.15rem;
+  }
+
+  .player-controls { display: flex; align-items: center; gap: 0.8rem; flex-shrink: 0; }
+
+  .ctrl-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold-dim);
+    transition: color 0.2s;
+  }
+  .ctrl-btn:hover { color: var(--gold-light); }
+  .ctrl-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  .ctrl-btn.big {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    color: var(--gold-light);
+  }
+  .ctrl-btn.big:hover { border-color: var(--gold); }
+  .ctrl-btn.big svg { width: 14px; height: 14px; }
+
+  .player-progress { flex: 1; max-width: 260px; display: flex; align-items: center; gap: 0.6rem; }
+  .progress-time {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-dim);
+    white-space: nowrap;
+    min-width: 2.8rem;
+  }
+  .progress-time.right { text-align: right; }
+  .progress-track {
+    flex: 1; height: 2px;
+    background: rgba(201,168,76,0.12);
+    border-radius: 1px;
+    cursor: pointer;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold-dim);
+    border-radius: 1px;
+    width: 0%;
+    transition: width 0.5s linear;
+    pointer-events: none;
+  }
+
+  .player-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--gold-dim);
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.3rem 0 0.3rem 0.4rem;
+    transition: color 0.2s;
+    flex-shrink: 0;
+  }
+  .player-close:hover { color: var(--gold-light); }
+
+  @media (max-width: 580px) {
+    .player-progress { display: none; }
+    .dana-section { padding: 2.5rem 1.5rem; }
+    .lyrics-inner { padding-left: 1.5rem; }
+    .song-header { grid-template-columns: 1.8rem 1fr 32px 24px; gap: 0.6rem; }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid rgba(201,168,76,0.08);
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-bottom: var(--player-h);
+  }
+  footer p {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    line-height: 2.2;
+  }
+  footer a { color: var(--gold-dim); text-decoration: none; }
+  footer a:hover { color: var(--gold-light); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.45; }
+    50%       { opacity: 1; }
+  }
+  .fade { opacity: 0; transform: translateY(12px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .fade.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo-wrap">
+    <img src="Modern_Mantras.png" alt="Modern Mantras – Joy for No Reason with Secret Chord Collective">
+  </div>
+  <p class="hero-sub">Joy for No Reason · Secret Chord Collective</p>
+  <p class="hero-tagline">Chants that arrived in silence. Given form to be sung.</p>
+  <p class="scroll-cue">↓ &nbsp; Listen &amp; read</p>
+</div>
+
+<!-- SONGS -->
+<div class="spacer-lg"></div>
+<div class="constrain fade">
+  <p class="eyebrow">Volume I — Batch I</p>
+  <h2 class="section-title">Three chants to carry with you</h2>
+  <p class="section-body">Each one short enough to memorize, deep enough to return to. Press play to listen, or click the title to read the lyrics.</p>
+
+  <ul class="song-list">
+
+    <!-- 01 LET IT BE -->
+    <li class="song-row" id="song-1">
+      <div class="song-header">
+        <span class="song-num">01</span>
+        <div class="song-info" onclick="toggleSong('song-1')" role="button" tabindex="0" aria-label="Show lyrics for Let It Be">
+          <span class="song-name">Let It Be</span>
+          <span class="song-vibe">Contemplative · spacious · a sense of the Mystery</span>
+        </div>
+        <button class="play-btn" onclick="playSong(0)" aria-label="Play Let It Be">
+          <svg class="icon-play" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
+          <svg class="icon-pause" viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
+        </button>
+        <button class="song-toggle" onclick="toggleSong('song-1')" aria-label="Expand lyrics">+</button>
+      </div>
+      <div class="lyrics-panel">
+        <div class="lyrics-inner">
+          <p class="lyrics-vibe">Gentle, spacious — the feeling of sitting in meditation and letting everything arrive and pass. A sense of awe at the Mystery unfolding and being the Mystery itself.</p>
+          <div class="lyrics-body">
+<span class="line">Let it in, let it bloom, let it go, let it flow <span class="rpt">×2</span></span>
+<span class="line">Let it in, let it bloom, let it go, let it flow <span class="rpt">×2</span></span>
+<span class="line">Nothing to resist, nothing to hold onto</span>
+<span class="line">I'm an instrument of God</span>
+<span class="gap"></span>
+<span class="line">Clear mind, open heart, subtle body</span>
+<span class="line">Meet this moment. Let it be.</span>
+<span class="line">Mystery unfolding endlessly. <span class="rpt">×2</span></span>
+<span class="dots">· · ·</span>
+<span class="line">Let it in, let it bloom, let it go, let it flow <span class="rpt">×2</span></span>
+<span class="line">Nothing to resist, nothing to hold onto</span>
+<span class="line">I'm an instrument of God</span>
+<span class="gap"></span>
+<span class="line">One step, one breath, one heartbeat at a time.</span>
+<span class="line">Trust this moment. Let it be.</span>
+<span class="line">Mystery unfolding endlessly. <span class="rpt">×2</span></span>
+<span class="dots">· · ·</span>
+<span class="line">Let it in, let it bloom, let it go, let it flow <span class="rpt">×2</span></span>
+<span class="line">Nothing to resist, nothing to hold onto</span>
+<span class="line">We're an instrument of God</span>
+<span class="gap"></span>
+<span class="line">One heartmind, one planet</span>
+<span class="line">Love this moment. Let it be.</span>
+<span class="line">Mystery unfolding endlessly. <span class="rpt">×3</span></span>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- 02 LIFE IS CELEBRATING ITSELF -->
+    <li class="song-row" id="song-2">
+      <div class="song-header">
+        <span class="song-num">02</span>
+        <div class="song-info" onclick="toggleSong('song-2')" role="button" tabindex="0" aria-label="Show lyrics for Life Is Celebrating Itself">
+          <span class="song-name">Life Is Celebrating Itself</span>
+          <span class="song-vibe">Celebratory · playful · embodied</span>
+        </div>
+        <button class="play-btn" onclick="playSong(1)" aria-label="Play Life Is Celebrating Itself">
+          <svg class="icon-play" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
+          <svg class="icon-pause" viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
+        </button>
+        <button class="song-toggle" onclick="toggleSong('song-2')" aria-label="Expand lyrics">+</button>
+      </div>
+      <div class="lyrics-panel">
+        <div class="lyrics-inner">
+          <p class="lyrics-vibe">Upbeat, heartfelt — marveling at how life is living through us. More energetic, more embodied.</p>
+          <div class="lyrics-body">
+<span class="line">Walk with me. Sing with me. Dance with me. Come play with me.</span>
+<span class="line">We are whole. We are free. We are worthy.</span>
+<span class="line">We are divine, one of a kind. We're one family. <span class="rpt">×2</span></span>
+<span class="gap"></span>
+<span class="line">Life is celebrating itself through us.</span>
+<span class="line">Life is knowing itself through us.</span>
+<span class="line">Life is loving itself through us.</span>
+<span class="line">Ooh ooh. Ooh ooh.</span>
+<span class="dots">· · ·</span>
+<span class="line">Laugh with me. Cry with me. Create with me. Come be with me.</span>
+<span class="line">We are whole. We are free. We are worthy.</span>
+<span class="line">We are divine, one of a kind. We're one family. <span class="rpt">×2</span></span>
+<span class="gap"></span>
+<span class="line">Life is celebrating itself through us.</span>
+<span class="line">Life is knowing itself through us.</span>
+<span class="line">Life is loving itself through us.</span>
+<span class="line">Ooh. Ooh. Ooh.</span>
+<span class="dots">· · ·</span>
+<span class="line">Walk with me. Sing with me. Dance with me. Come play with me.</span>
+<span class="line">We are whole. We are free. We are worthy.</span>
+<span class="line">We are divine, one of a kind. We're one family. <span class="rpt">×2</span></span>
+<span class="gap"></span>
+<span class="line">Life is celebrating itself through us.</span>
+<span class="line">Life is knowing itself through us.</span>
+<span class="line">Life is loving itself through us.</span>
+<span class="line">Ooh. Ooh. Ooh.</span>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- 03 HOME IN THIS HEART -->
+    <li class="song-row" id="song-3">
+      <div class="song-header">
+        <span class="song-num">03</span>
+        <div class="song-info" onclick="toggleSong('song-3')" role="button" tabindex="0" aria-label="Show lyrics for Home in This Heart">
+          <span class="song-name">Home in This Heart</span>
+          <span class="song-vibe">Devotional · weighted · gratitude overflowing</span>
+        </div>
+        <button class="play-btn" onclick="playSong(2)" aria-label="Play Home in This Heart">
+          <svg class="icon-play" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
+          <svg class="icon-pause" viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
+        </button>
+        <button class="song-toggle" onclick="toggleSong('song-3')" aria-label="Expand lyrics">+</button>
+      </div>
+      <div class="lyrics-panel">
+        <div class="lyrics-inner">
+          <p class="lyrics-vibe">Devotional, sincere — a weighted, meditative quality. Like going somewhere deep. Seeing beauty and goodness everywhere.</p>
+          <div class="lyrics-body">
+<span class="line">Meeting beauty everywhere. Meeting goodness everywhere. <span class="rpt">×2</span></span>
+<span class="gap"></span>
+<span class="line">In this living moment, a heart of sincerity.</span>
+<span class="line">In this dying moment, a heart filled with gratitude. <span class="rpt">×2</span></span>
+<span class="dots">· · ·</span>
+<span class="line">I am grateful. So grateful. I am grateful to be alive.</span>
+<span class="line">I am grateful. So grateful. I found home in this heart.</span>
+<span class="line">I found home in this heart.</span>
+<span class="dots">· · ·</span>
+<span class="line">Meeting beauty everywhere. It's meeting goodness everywhere.</span>
+<span class="line">Meeting beauty everywhere. It's meeting goodness everywhere. <span class="rpt">×4</span></span>
+<span class="dots">· · ·</span>
+<span class="line">In this living moment, a heart of sincerity.</span>
+<span class="line">In this dying moment, a heart filled with gratitude. <span class="rpt">×2</span></span>
+<span class="dots">· · ·</span>
+<span class="line">I am grateful. So grateful. I am grateful to be alive.</span>
+<span class="line">I am grateful. So grateful. I found home in this heart.</span>
+<span class="line">I found home in this heart.</span>
+<span class="gap"></span>
+<span class="line">I found home. In this heart.</span>
+          </div>
+        </div>
+      </div>
+    </li>
+
+  </ul>
+</div>
+
+<div class="spacer-lg"></div>
+<div class="divider"></div>
+<div class="spacer-lg"></div>
+
+<!-- DANA -->
+<div class="constrain fade">
+  <div class="dana-section">
+    <p class="eyebrow">Dana</p>
+    <h2 class="section-title">The music is free.<br>Give what moves you.</h2>
+    <p class="section-body" style="max-width:500px;">Modern Mantras is offered in the spirit of dana — the ancient practice of freely giving and freely receiving. These chants arrived as gifts. They are passed on the same way.</p>
+    <p class="section-body" style="max-width:500px; margin-top:1rem;">If they have meant something to you, your gift funds the making of the next three.</p>
+    <div class="batch-dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+      <span class="dot-sep">+</span>
+      <div class="dot dim"></div><div class="dot dim"></div><div class="dot dim"></div>
+    </div>
+    <p class="batch-label">Batch I complete &nbsp;·&nbsp; Batch II waiting</p>
+    <a href="support.html" class="cta-btn">Give dana →</a>
+  </div>
+</div>
+
+<div class="spacer-lg"></div>
+
+<footer>
+  <p>
+    Modern Mantras &nbsp;·&nbsp; <a href="https://www.sarahmariehopf.com/">Sarah-Marie Hopf</a> &amp; Secret Chord Collective<br>
+    A project by Nathan Vanderpool &nbsp;·&nbsp; <a href="https://agapicchants.com">agapicchants.com</a><br>
+    Donations are received by Nathan Vanderpool as a private individual and are not tax-deductible.<br>
+    Berlin &nbsp;·&nbsp; 2025
+  </p>
+</footer>
+
+<!-- BOTTOM PLAYER -->
+<div id="player-bar" role="region" aria-label="Audio player">
+  <div class="player-cover">
+    <svg viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
+  </div>
+
+  <div class="player-info">
+    <div class="player-title" id="player-title">—</div>
+    <div class="player-artist">Joy for No Reason · Secret Chord Collective</div>
+  </div>
+
+  <div class="player-progress">
+    <span class="progress-time" id="time-current">0:00</span>
+    <div class="progress-track" id="progress-track" onclick="seekTo(event)">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="progress-time right" id="time-total">—</span>
+  </div>
+
+  <div class="player-controls">
+    <button class="ctrl-btn" onclick="skipSong(-1)" aria-label="Previous">
+      <svg viewBox="0 0 16 16"><polygon points="13,2 4,8 13,14"/><rect x="2" y="2" width="2" height="12"/></svg>
+    </button>
+    <button class="ctrl-btn big" id="main-play-btn" onclick="togglePlayPause()" aria-label="Play / Pause">
+      <svg id="main-play-icon" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
+      <svg id="main-pause-icon" viewBox="0 0 16 16" style="display:none"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
+    </button>
+    <button class="ctrl-btn" onclick="skipSong(1)" aria-label="Next">
+      <svg viewBox="0 0 16 16"><polygon points="3,2 12,8 3,14"/><rect x="12" y="2" width="2" height="12"/></svg>
+    </button>
+  </div>
+
+  <button class="player-close" onclick="closePlayer()" aria-label="Close player">×</button>
+</div>
+
+<!-- Hidden audio element -->
+<audio id="audio" preload="none"></audio>
+
+<script>
+  // ── SONG DATA ────────────────────────────────────────────────────
+  // Replace src with real audio URLs (SoundCloud direct links, CDN, etc.)
+  // SoundCloud tip: use the track's direct stream URL from SoundCloud's oEmbed API
+  // or host MP3/AAC files and point src here.
+  const SONGS = [
+    {
+      title: 'Let It Be',
+      src: null   // e.g. 'https://your-cdn.com/let-it-be.mp3'
+    },
+    {
+      title: 'Life Is Celebrating Itself',
+      src: null
+    },
+    {
+      title: 'Home in This Heart',
+      src: null
+    }
+  ];
+
+  // ── STATE ────────────────────────────────────────────────────────
+  const audio     = document.getElementById('audio');
+  const bar       = document.getElementById('player-bar');
+  const titleEl   = document.getElementById('player-title');
+  const fillEl    = document.getElementById('progress-fill');
+  const curEl     = document.getElementById('time-current');
+  const totEl     = document.getElementById('time-total');
+  const mainPlay  = document.getElementById('main-play-icon');
+  const mainPause = document.getElementById('main-pause-icon');
+
+  let currentIdx = -1;
+
+  function fmt(s) {
+    if (!isFinite(s)) return '—';
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return m + ':' + String(sec).padStart(2,'0');
+  }
+
+  function updatePlayBtns(playing) {
+    document.querySelectorAll('.play-btn').forEach((btn, i) => {
+      btn.classList.toggle('playing', playing && i === currentIdx);
+    });
+    mainPlay.style.display  = playing ? 'none' : '';
+    mainPause.style.display = playing ? '' : 'none';
+  }
+
+  function loadSong(idx) {
+    currentIdx = idx;
+    const song = SONGS[idx];
+    titleEl.textContent = song.title;
+
+    if (song.src) {
+      audio.src = song.src;
+      audio.load();
+      audio.play();
+      updatePlayBtns(true);
+    } else {
+      // No audio yet — show player bar with "coming soon" state
+      totEl.textContent = '—';
+      curEl.textContent = '0:00';
+      fillEl.style.width = '0%';
+      updatePlayBtns(false);
+      titleEl.textContent = song.title + ' (audio coming soon)';
+    }
+
+    bar.classList.add('visible');
+  }
+
+  function playSong(idx) {
+    if (idx === currentIdx && SONGS[idx].src) {
+      togglePlayPause();
+      return;
+    }
+    loadSong(idx);
+  }
+
+  function togglePlayPause() {
+    if (!SONGS[currentIdx] || !SONGS[currentIdx].src) return;
+    if (audio.paused) {
+      audio.play();
+      updatePlayBtns(true);
+    } else {
+      audio.pause();
+      updatePlayBtns(false);
+    }
+  }
+
+  function skipSong(dir) {
+    const next = (currentIdx + dir + SONGS.length) % SONGS.length;
+    loadSong(next);
+  }
+
+  function seekTo(e) {
+    if (!SONGS[currentIdx]?.src || !isFinite(audio.duration)) return;
+    const rect = document.getElementById('progress-track').getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    audio.currentTime = pct * audio.duration;
+  }
+
+  function closePlayer() {
+    audio.pause();
+    bar.classList.remove('visible');
+    updatePlayBtns(false);
+    currentIdx = -1;
+  }
+
+  audio.addEventListener('timeupdate', () => {
+    if (!isFinite(audio.duration)) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    fillEl.style.width = pct + '%';
+    curEl.textContent = fmt(audio.currentTime);
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    totEl.textContent = fmt(audio.duration);
+  });
+
+  audio.addEventListener('ended', () => {
+    skipSong(1);
+  });
+
+  audio.addEventListener('play',  () => updatePlayBtns(true));
+  audio.addEventListener('pause', () => updatePlayBtns(false));
+
+  // ── LYRICS TOGGLE ────────────────────────────────────────────────
+  function toggleSong(id) {
+    const row = document.getElementById(id);
+    const isOpen = row.classList.contains('open');
+    document.querySelectorAll('.song-row').forEach(r => r.classList.remove('open'));
+    if (!isOpen) row.classList.add('open');
+  }
+
+  // keyboard support for lyric expand
+  document.querySelectorAll('.song-info[role="button"]').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        el.click();
+      }
+    });
+  });
+
+  // ── FADE IN ──────────────────────────────────────────────────────
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
