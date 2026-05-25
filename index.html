@@ -166,21 +166,29 @@
 
   /* expand toggle */
   .song-toggle {
-    width: 28px; height: 28px;
-    border: 1px solid rgba(201,168,76,0.2);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; gap: 0.3rem;
     flex-shrink: 0;
     cursor: pointer;
-    transition: border-color 0.2s, transform 0.3s;
-    color: var(--gold-dim);
-    font-size: 0.75rem;
-    line-height: 1;
     background: transparent;
+    border: none;
     padding: 0;
     font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    transition: color 0.2s;
+    white-space: nowrap;
   }
-  .song-row.open .song-toggle { border-color: var(--gold-dim); transform: rotate(45deg); }
+  .song-toggle:hover { color: var(--gold-light); }
+  .song-toggle .chevron {
+    display: inline-block;
+    transition: transform 0.3s;
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+  .song-row.open .song-toggle .chevron { transform: rotate(90deg); }
+  .song-row.open .song-toggle { color: rgba(232,204,128,0.6); }
 
   /* ── LYRICS PANEL ── */
   .lyrics-panel {
@@ -454,7 +462,7 @@
           <svg class="icon-play" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
           <svg class="icon-pause" viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
         </button>
-        <button class="song-toggle" onclick="toggleSong('song-1')" aria-label="Expand lyrics">+</button>
+        <button class="song-toggle" onclick="toggleSong('song-1')" aria-label="Show lyrics"><span class="chevron">›</span> Lyrics</button>
       </div>
       <div class="lyrics-panel">
         <div class="lyrics-inner">
@@ -501,7 +509,7 @@
           <svg class="icon-play" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
           <svg class="icon-pause" viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
         </button>
-        <button class="song-toggle" onclick="toggleSong('song-2')" aria-label="Expand lyrics">+</button>
+        <button class="song-toggle" onclick="toggleSong('song-2')" aria-label="Show lyrics"><span class="chevron">›</span> Lyrics</button>
       </div>
       <div class="lyrics-panel">
         <div class="lyrics-inner">
@@ -550,7 +558,7 @@
           <svg class="icon-play" viewBox="0 0 16 16"><polygon points="4,2 14,8 4,14"/></svg>
           <svg class="icon-pause" viewBox="0 0 16 16"><rect x="3" y="2" width="4" height="12"/><rect x="9" y="2" width="4" height="12"/></svg>
         </button>
-        <button class="song-toggle" onclick="toggleSong('song-3')" aria-label="Expand lyrics">+</button>
+        <button class="song-toggle" onclick="toggleSong('song-3')" aria-label="Show lyrics"><span class="chevron">›</span> Lyrics</button>
       </div>
       <div class="lyrics-panel">
         <div class="lyrics-inner">
