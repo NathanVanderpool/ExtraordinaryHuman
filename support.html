@@ -296,6 +296,41 @@
   footer a { color: var(--gold-dim); text-decoration: none; }
   footer a:hover { color: var(--gold-light); }
 
+  /* ── PHOTOS ── */
+  .photo-grid {
+    max-width: 620px;
+    margin: 3.5rem auto 0;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .photo-item { display: flex; flex-direction: column; gap: 0.7rem; }
+
+  .photo-item img {
+    width: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: sepia(20%) brightness(0.88) contrast(1.05);
+    border: 1px solid rgba(201,168,76,0.12);
+  }
+
+  .photo-caption {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 500px) {
+    .photo-grid { grid-template-columns: 1fr; }
+  }
+
   /* ── FADE ── */
   .fade { opacity: 0; transform: translateY(12px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .fade.visible { opacity: 1; transform: none; }
@@ -331,6 +366,18 @@
   <p>
     If they have meant something to you, and you feel moved to give, you can support the making of the next batch here.
   </p>
+</div>
+
+<!-- PHOTOS -->
+<div class="photo-grid fade">
+  <div class="photo-item">
+    <img src="Sarah-Marie-sunflowers.png" alt="Sarah-Marie Hopf">
+    <p class="photo-caption">Sarah-Marie Hopf<br>Wisdom teacher &middot; dharma musician</p>
+  </div>
+  <div class="photo-item">
+    <img src="nathan_studio.jpg" alt="Nathan Vanderpool in the studio">
+    <p class="photo-caption">Nathan Vanderpool<br>Secret Chord Collective &middot; Berlin</p>
+  </div>
 </div>
 
 <div class="divider"></div>
